@@ -16,3 +16,6 @@ Coba pahami sesuai urutan berikut
 
 2. irisflower.py
 https://raw.githubusercontent.com/jbrownlee/Datasets/master/iris.csv
+
+
+3. Albalone

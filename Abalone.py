@@ -13,7 +13,7 @@ print("K-Means Clustering Algorithm")
 
 def getData():
     # Buka File CSV lalu return kan menjadi array
-    with open('datasets/iris.csv') as csv_file:
+    with open('datasets/abalone.data') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         return list(csv_reader)
 
@@ -41,7 +41,7 @@ def hitungJarak(data,Cluster):
 
         arr=[]
         for C in Cluster: # Titik tersebut terhadap ketiga cluster jaraknya berapa
-            jarak = euclidean_distance(C,[float(row[0]),float(row[1])])
+            jarak = euclidean_distance(C,[float(row[0]),float(row[1]),float(row[2])])
             arr.append(jarak)
 
         # Titik tersebut dekat ke cluster yang mana ?
@@ -49,7 +49,7 @@ def hitungJarak(data,Cluster):
         idx=cariMinimum(arr) 
         # lalu labeli titik tersebut dengan label 1,2,3 dst 
         # ini idx+1 karena array itu dari 0 
-        new_data.append([float(row[0]),float(row[1]),idx+1])
+        new_data.append([float(row[0]),float(row[1]),float(row[2]),idx+1])
     
     # return array semua titik, yang telah ter update labelnya
     return new_data
@@ -65,7 +65,7 @@ def updateTitikTengahCluster(new_data,Cluster):
         banyak=0
         for m in new_data:
             
-            if(m[2]==i+1):
+            if(m[3]==i+1):
                 for j in range(0,len(arrData)):
                     arrData[j]+=m[j]
 
@@ -113,6 +113,7 @@ def newCluster(k,new_data):
     for i in range(0,k):
         Cluster.append([
             random.uniform(mini,maxi),
+            random.uniform(mini,maxi),
             random.uniform(mini,maxi)
         ])
     
@@ -125,7 +126,7 @@ def countVariation(new_data,k):
     for i in range(1,k+1):
         count=0
         for j in new_data:
-            if(j[2]==i):
+            if(j[3]==i):
                 count+=1
 
         arr.append(count)
@@ -164,47 +165,51 @@ def itsSame(points1,points2):
 
 
 fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
+ax = fig.add_subplot(111,projection='3d')
 
 def outputkan(new_data,Cluster,clear=False):
     color=["red","green","blue","black","yellow","pink"]
     for row in new_data:
-        ax.scatter(row[0],row[1],color=color[row[2]-1])
+        ax.scatter(row[0],row[1],row[2],color=color[int(row[3])-1])
       
     for i in range(0,len(Cluster)):
-        ax.scatter(Cluster[i][0],Cluster[i][1], c=color[i],marker="+")
+        ax.scatter(Cluster[i][0],Cluster[i][1],Cluster[i][2], c=color[i],marker="+")
 
-    plt.pause(0.01)
+    plt.pause(0.001)
     if(not clear):
         ax.clear()
 
 
+# In dataset representing character in number
+# (M) Male =0 
+# (F) Female = 1
+# (I) Infant =2
 
 data = getData()
-K=3
+K=4
 # print(data)
 
 
 new_data=data
 Cluster=newCluster(K,new_data)
-# # print(Cluster)
+# print(Cluster)
 
-# new_data=hitungJarak(new_data,Cluster)
+new_data=hitungJarak(new_data,Cluster)
 # # print(new_data)
-# # outputkan(new_data,Cluster)
+# outputkan(new_data,Cluster)
 
-# Cluster=updateTitikTengahCluster(new_data,Cluster)
-# # print(Cluster)
+Cluster=updateTitikTengahCluster(new_data,Cluster)
+# print(Cluster)
 
 
-# # print(new_data)
+# print(new_data)
 # outputkan(new_data,Cluster)
 
 dataCluster=[]
 
-for j in range(0,30):
-    # print(j)
-    for i in range(0,30):
+for j in range(0,4):
+    print(j)
+    for i in range(0,50):
         # print(i)
         if(i!=0):
             varBefore=var
@@ -228,7 +233,7 @@ for j in range(0,30):
     
     Cluster=newCluster(K,new_data)
 
-# print(dataCluster)
+print(dataCluster)
 
 
 def minimumSelisih(dataCluster):
