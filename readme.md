@@ -1,5 +1,9 @@
 K Means, Clustering Algorithm
 
+# Lihat video ini dulu 
+https://www.youtube.com/watch?v=4b5d3muPQmA
+
+
 # Harus baca dari mana ?
 
 Coba pahami sesuai urutan berikut
